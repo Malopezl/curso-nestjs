@@ -9,11 +9,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  app.enableCors();
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
-    })
+    }),
   );
 
   const config = new DocumentBuilder()
@@ -22,10 +24,12 @@ async function bootstrap() {
     .setVersion('1.0')
     // .addTag('cats')
     .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  // const documentFactory = () => SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
-  logger.log(`App runing on port: ${process.env.PORT}`);
+  const PORT = process.env.PORT ?? 3000;
+  await app.listen(PORT);
+  logger.log(`App runing on port: ${PORT}`);
 }
-bootstrap();
+export { bootstrap };

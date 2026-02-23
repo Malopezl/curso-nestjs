@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, UseGuards, Req, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Headers,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -10,7 +18,7 @@ import { validRoles } from './interfaces';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   createUser(@Body() createUserDto: CreateUserDto) {
@@ -24,9 +32,7 @@ export class AuthController {
 
   @Get('check-status')
   @Auth()
-  checkAuthStatus(
-    @GetUser() user: User,
-  ) {
+  checkAuthStatus(@GetUser() user: User) {
     return this.authService.checkAuthStatus(user);
   }
 
@@ -40,41 +46,34 @@ export class AuthController {
     @RawHeaders() rawHeaders: string[],
     @Headers() headers: IncomingHttpHeaders,
   ) {
-
     return {
       ok: true,
       message: 'Hola mundo private',
       user,
       userEmail,
       rawHeaders,
-      headers
-    }
+      headers,
+    };
   }
 
   // @SetMetadata('roles', ['admin', 'super-user'])
   @Get('private2')
   @RoleProtected(validRoles.superUser)
   @UseGuards(AuthGuard(), UserRoleGuard)
-  privateRoute2(
-    @GetUser() user: User,
-  ) {
+  privateRoute2(@GetUser() user: User) {
     return {
       ok: true,
       user,
-    }
+    };
   }
-  
+
   @Get('private3')
   //Si no se manda ningun rol, acepta cualquier usuario activo.
   @Auth(validRoles.superUser)
-  privateRoute3(
-    @GetUser() user: User,
-  ) {
-
+  privateRoute3(@GetUser() user: User) {
     return {
       ok: true,
       user,
-    }
+    };
   }
-
 }

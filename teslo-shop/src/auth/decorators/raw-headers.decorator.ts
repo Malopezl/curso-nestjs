@@ -1,13 +1,13 @@
-import { createParamDecorator, ExecutionContext, InternalServerErrorException } from "@nestjs/common";
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const RawHeaders = createParamDecorator(
-    (data, ctx: ExecutionContext) => {
-        const req = ctx.switchToHttp().getRequest();
-        const headers = req.rawHeaders;
+export const getRawHeaders = (data: string, ctx: ExecutionContext) => {
+  const req = ctx.switchToHttp().getRequest();
+  // const headers = req.rawHeaders;
 
-        if (!headers)
-            throw new InternalServerErrorException('User not found (request)');
+  // if (!headers)
+  //   throw new InternalServerErrorException('User not found (request)');
 
-        return headers;
-    }
-);
+  return req.rawHeaders; // [Authorization, bearer token, user-agent]
+};
+
+export const RawHeaders = createParamDecorator(getRawHeaders);

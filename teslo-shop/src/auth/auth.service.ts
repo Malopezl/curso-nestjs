@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -14,7 +19,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
 
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     try {
@@ -29,9 +34,9 @@ export class AuthService {
       const { password: pass, ...userInfo } = user;
 
       return {
-      ...userInfo,
-      token: this.getJwtToken({ id: user.id }),
-    };
+        user: userInfo,
+        token: this.getJwtToken({ id: user.id }),
+      };
     } catch (error) {
       this.handleDBErrors(error);
     }
@@ -52,14 +57,14 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid (password)');
 
     return {
-      ...user,
+      user: user,
       token: this.getJwtToken({ id: user.id }),
     };
   }
 
   async checkAuthStatus(user: User) {
     return {
-      ...user,
+      user: user,
       token: this.getJwtToken({ id: user.id }),
     };
   }
@@ -76,5 +81,4 @@ export class AuthService {
     console.log(error);
     throw new InternalServerErrorException('Please check server logs');
   }
-
 }

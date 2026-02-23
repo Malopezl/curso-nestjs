@@ -26,11 +26,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         return {
           secret: configService.get('JWT_SECRET'),
           signOptions: {
-            expiresIn: '2h'
-          }
-        }
-      }
-    })
+            expiresIn: '2h',
+          },
+        };
+      },
+    }),
     // JwtModule.register({
     //   secret: process.env.JWT_SECRET,
     //   signOptions: {
@@ -40,4 +40,4 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   ],
   exports: [TypeOrmModule, JwtStrategy, PassportModule, JwtModule],
 })
-export class AuthModule { }
+export class AuthModule {}

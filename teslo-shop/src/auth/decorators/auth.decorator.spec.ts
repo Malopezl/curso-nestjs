@@ -1,0 +1,36 @@
+import { applyDecorators, UseGuards } from '@nestjs/common';
+import { validRoles } from '../interfaces';
+import { Auth } from './auth.decorator';
+import { RoleProtected } from './role-protected.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { UserRoleGuard } from '../guards/user-role/user-role.guard';
+
+jest.mock('@nestjs/common', () => ({
+  applyDecorators: jest.fn(),
+  UseGuards: jest.fn(),
+}));
+
+jest.mock('@nestjs/passport', () => ({
+  AuthGuard: jest.fn(() => 'MockAuthGuard'),
+}));
+
+jest.mock('../guards/user-role/user-role.guard', () => ({
+  UserRoleGuard: jest.fn(() => 'MockUserRoleGuard'),
+}));
+
+jest.mock('./role-protected.decorator', () => ({
+  RoleProtected: jest.fn(() => 'MockRoleProtected'),
+}));
+
+describe('Auth Decorator', () => {
+  it('should call applyDecorators with RoleProtected and UseGuards', () => {
+    const roles: validRoles[] = [validRoles.admin, validRoles.user];
+
+    Auth(...roles);
+
+    expect(applyDecorators).toHaveBeenCalledWith(
+      RoleProtected(...roles),
+      UseGuards(AuthGuard(), UserRoleGuard),
+    );
+  });
+});

@@ -18,9 +18,8 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
       //para una conexion certificada
       ssl: process.env.STAGE === 'prod',
       extra: {
-        ssl: process.env.STAGE === 'prod'
-          ? { rejectUnauthorized: false }
-          : null,
+        ssl:
+          process.env.STAGE === 'prod' ? { rejectUnauthorized: false } : null,
       },
 
       type: 'postgres',
@@ -49,7 +48,7 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
 
     AuthModule,
 
-    MessagesWsModule
+    MessagesWsModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
