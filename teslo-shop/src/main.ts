@@ -3,9 +3,9 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const logger = new Logger('bootsrap');
+  const logger = new Logger('bootstrap');
 
   app.setGlobalPrefix('api');
 
@@ -32,4 +32,4 @@ async function bootstrap() {
   await app.listen(PORT);
   logger.log(`App runing on port: ${PORT}`);
 }
-export { bootstrap };
+bootstrap();
